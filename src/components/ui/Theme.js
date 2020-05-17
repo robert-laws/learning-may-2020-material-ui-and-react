@@ -17,8 +17,20 @@ export const theme = createMuiTheme({
     }
   },
   typography: {
-    h6: {
-      fontWeight: 500
+    tab: {
+      fontFamily: 'Raleway',
+      textTransform: 'none',
+      fontWeight: 700,
+      fontSize: '1rem',
+      '&:last-child': {
+        marginRight: '15px'
+      }
+    },
+    estimate: {
+      fontFamily: 'Pacifico',
+      fontSize: '1rem',
+      textTransform: 'none',
+      color: '#FFFFFF'
     }
   }
 })
