@@ -51,6 +51,18 @@ const useStyles = makeStyles(theme => ({
     marginLeft: '35px',
     marginRight: '25px',
     height: '45px'
+  },
+  menu: {
+    backgroundColor: theme.palette.common.blue,
+    color: '#FFFFFF',
+    borderRadius: '0px'
+  },
+  menuItem: {
+    ...theme.typography.tab,
+    opacity: 0.7,
+    "&:hover": {
+      opacity: 1
+    }
   }
 }))
 
@@ -60,6 +72,7 @@ const Header = props => {
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleChange = (event, value) => {
     setValue(value)
@@ -70,23 +83,80 @@ const Header = props => {
     setOpen(true);
   }
 
+  const handleMenuItemClick = (event, index) => {
+    setAnchorEl(null);
+    setOpen(false);
+    setSelectedIndex(index);
+  }
+
   const handleClose = event => {
     setAnchorEl(null);
     setOpen(false);
   }
 
+  const menuOptions = [
+    {name: 'Services', link: '/services'},
+    {name: 'Custom Software Development', link: '/custom-software'},
+    {name: 'Mobile App Development', link: '/mobile-apps'},
+    {name: 'Website Development', link: '/websites'}
+]
+
   useEffect(() => {
-    if (window.location.pathname === '/' && value !== 0) {
-      setValue(0)
-    } else if(window.location.pathname === '/services' && value !== 1) {
-      setValue(1)
-    } else if(window.location.pathname === '/information' && value !== 2) {
-      setValue(2)
-    } else if(window.location.pathname === '/about-us' && value !== 3) {
-      setValue(3)
-    } else if(window.location.pathname === '/contact-us' && value !== 4) {
-      setValue(4)
+    switch(window.location.pathname) {
+      case "/":
+        if(value !== 0) {
+          setValue(0)
+        }
+        break;
+      case "/services":
+        if(value !== 1) {
+          setValue(1)
+          setSelectedIndex(0)
+        }
+        break;
+      case "/custom-software":
+        if(value !== 1) {
+          setValue(1)
+          setSelectedIndex(1)
+        }
+        break;
+      case "/mobile-apps":
+        if(value !== 1) {
+          setValue(1)
+          setSelectedIndex(2)
+        }
+        break;
+      case "/websites":
+        if(value !== 1) {
+          setValue(1)
+          setSelectedIndex(3)
+        }
+        break;
+      case "/information":
+        if(value !== 2) {
+          setValue(2)
+        }
+        break;
+      case "/about-us":
+        if(value !== 3) {
+          setValue(3)
+        }
+        break;
+      case "/contact-us":
+        if(value !== 4) {
+          setValue(4)
+        }
+        break;
+      case "/estimate":
+        if(value !== 5) {
+          setValue(5)
+        }
+        break;
+
+      default:
+        break;
     }
+
   }, [value])
 
   return (
@@ -110,11 +180,12 @@ const Header = props => {
             <Button variant="contained" color="secondary" className={classes.button}>
               Free Estimate
             </Button>
-            <Menu id='simple-menu' anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{onMouseLeave: handleClose}}>
-              <MenuItem onClick={() => {handleClose(); setValue(1)}} component={Link} to='/services'>Services</MenuItem>
-              <MenuItem onClick={() => {handleClose(); setValue(1)}} component={Link} to='/custom-software'>Custom Software Development</MenuItem>
-              <MenuItem onClick={() => {handleClose(); setValue(1)}} component={Link} to='/mobile-apps'>Mobile App Development</MenuItem>
-              <MenuItem onClick={() => {handleClose(); setValue(1)}} component={Link} to='/websites'>Website Development</MenuItem>
+            <Menu id='simple-menu' anchorEl={anchorEl} open={open} onClose={handleClose} classes={{paper: classes.menu}} MenuListProps={{onMouseLeave: handleClose}} elevation={0}>
+              {menuOptions.map((option, index) => (
+                <MenuItem key={option} component={Link} to={option.link} classes={{root: classes.menuItem}} onClick={(event) => {handleMenuItemClick(event, index); setValue(1); handleClose()}} selected={index === selectedIndex && value === 1}>
+                  {option.name}
+                </MenuItem>
+              ))}
             </Menu>
           </Toolbar>
         </AppBar>
